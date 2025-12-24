@@ -1,0 +1,72 @@
+name: Validate Marketplace
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate marketplace.json exists
+        run: |
+          if [ ! -f ".claude-plugin/marketplace.json" ]; then
+            echo "Error: .claude-plugin/marketplace.json not found"
+            exit 1
+          fi
+          echo "✓ marketplace.json exists"
+
+      - name: Validate marketplace.json syntax
+        run: |
+          python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
+          echo "✓ marketplace.json is valid JSON"
+
+      - name: Validate required fields
+        run: |
+          # Check for required fields
+          REQUIRED_FIELDS=("name" "version" "description" "plugins")
+          for field in "${REQUIRED_FIELDS[@]}"; do
+            if ! grep -q "\"$field\"" .claude-plugin/marketplace.json; then
+              echo "Error: Missing required field '$field' in marketplace.json"
+              exit 1
+            fi
+          done
+          echo "✓ All required fields present"
+
+      - name: Validate plugins have required fields
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+
+          with open('.claude-plugin/marketplace.json') as f:
+              data = json.load(f)
+
+          plugins = data.get('plugins', [])
+          required_plugin_fields = ['name', 'description', 'source']
+
+          for i, plugin in enumerate(plugins):
+              for field in required_plugin_fields:
+                  if field not in plugin:
+                      print(f"Error: Plugin {i+1} missing required field '{field}'")
+                      sys.exit(1)
+              print(f"✓ Plugin '{plugin['name']}' validated")
+
+          print(f"\n✓ All {len(plugins)} plugin(s) validated")
+          EOF
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "=== Marketplace Validation Summary ==="
+          echo "Marketplace: $(grep -o '"name": *"[^"]*"' .claude-plugin/marketplace.json | head -1 | cut -d'"' -f4)"
+          echo "Version: $(grep -o '"version": *"[^"]*"' .claude-plugin/marketplace.json | head -1 | cut -d'"' -f4)"
+          echo "Plugins: $(python3 -c "import json; print(len(json.load(open('.claude-plugin/marketplace.json'))['plugins']))")"
+          echo "======================================="
