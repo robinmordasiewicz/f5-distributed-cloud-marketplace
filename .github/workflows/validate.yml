@@ -18,7 +18,7 @@ jobs:
       - name: Validate marketplace.json exists
         run: |
           if [ ! -f ".claude-plugin/marketplace.json" ]; then
-            echo "Error: .claude-plugin/marketplace.json not found"
+            echo "::error::Missing .claude-plugin/marketplace.json"
             exit 1
           fi
           echo "✓ marketplace.json exists"
@@ -28,17 +28,55 @@ jobs:
           python3 -m json.tool .claude-plugin/marketplace.json > /dev/null
           echo "✓ marketplace.json is valid JSON"
 
-      - name: Validate required fields
+      - name: Validate required files exist
         run: |
-          # Check for required fields
-          REQUIRED_FIELDS=("name" "version" "description" "plugins")
-          for field in "${REQUIRED_FIELDS[@]}"; do
-            if ! grep -q "\"$field\"" .claude-plugin/marketplace.json; then
-              echo "Error: Missing required field '$field' in marketplace.json"
-              exit 1
-            fi
-          done
-          echo "✓ All required fields present"
+          ERRORS=0
+
+          if [ ! -f "LICENSE" ]; then
+            echo "::error::Missing LICENSE file"
+            ERRORS=$((ERRORS + 1))
+          else
+            echo "✓ LICENSE file exists"
+          fi
+
+          if [ ! -f "CHANGELOG.md" ]; then
+            echo "::error::Missing CHANGELOG.md file"
+            ERRORS=$((ERRORS + 1))
+          else
+            echo "✓ CHANGELOG.md exists"
+          fi
+
+          if [ $ERRORS -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: Validate required marketplace fields
+        run: |
+          python3 << 'EOF'
+          import json
+          import sys
+
+          with open('.claude-plugin/marketplace.json') as f:
+              data = json.load(f)
+
+          required_fields = ['name', 'version', 'description', 'license', 'owner', 'plugins']
+          errors = []
+
+          for field in required_fields:
+              if field not in data:
+                  errors.append(f"Missing required field: {field}")
+
+          if 'owner' in data:
+              if 'name' not in data['owner']:
+                  errors.append("Missing owner.name field")
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}")
+              sys.exit(1)
+
+          print("✓ All required marketplace fields present")
+          EOF
 
       - name: Validate plugins have required fields
         run: |
@@ -50,23 +88,81 @@ jobs:
               data = json.load(f)
 
           plugins = data.get('plugins', [])
-          required_plugin_fields = ['name', 'description', 'source']
+          required_fields = ['name', 'description', 'source']
+          errors = []
 
           for i, plugin in enumerate(plugins):
-              for field in required_plugin_fields:
+              for field in required_fields:
                   if field not in plugin:
-                      print(f"Error: Plugin {i+1} missing required field '{field}'")
-                      sys.exit(1)
-              print(f"✓ Plugin '{plugin['name']}' validated")
+                      errors.append(f"Plugin '{plugin.get('name', f'index {i}')}' missing field: {field}")
 
-          print(f"\n✓ All {len(plugins)} plugin(s) validated")
+              # Validate source structure
+              source = plugin.get('source', {})
+              if isinstance(source, dict):
+                  if 'source' not in source or 'repo' not in source:
+                      errors.append(f"Plugin '{plugin.get('name')}' has invalid source structure")
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}")
+              sys.exit(1)
+
+          for plugin in plugins:
+              print(f"✓ Plugin '{plugin['name']}' validated")
+          EOF
+
+      - name: Validate plugin sources are accessible
+        run: |
+          python3 << 'EOF'
+          import json
+          import urllib.request
+          import sys
+
+          with open('.claude-plugin/marketplace.json') as f:
+              data = json.load(f)
+
+          errors = []
+          for plugin in data.get('plugins', []):
+              source = plugin.get('source', {})
+              if isinstance(source, dict) and source.get('source') == 'github':
+                  repo = source.get('repo', '')
+                  url = f"https://api.github.com/repos/{repo}"
+                  try:
+                      req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                      urllib.request.urlopen(req, timeout=10)
+                      print(f"✓ Plugin '{plugin['name']}' source accessible: {repo}")
+                  except urllib.error.HTTPError as e:
+                      if e.code == 404:
+                          errors.append(f"Plugin '{plugin['name']}' source not found: {repo}")
+                      else:
+                          errors.append(f"Plugin '{plugin['name']}' source error ({e.code}): {repo}")
+                  except Exception as e:
+                      errors.append(f"Plugin '{plugin['name']}' source check failed: {e}")
+
+          if errors:
+              for error in errors:
+                  print(f"::error::{error}")
+              sys.exit(1)
+
+          print("\n✓ All plugin sources accessible")
           EOF
 
       - name: Summary
         run: |
           echo ""
           echo "=== Marketplace Validation Summary ==="
-          echo "Marketplace: $(grep -o '"name": *"[^"]*"' .claude-plugin/marketplace.json | head -1 | cut -d'"' -f4)"
-          echo "Version: $(grep -o '"version": *"[^"]*"' .claude-plugin/marketplace.json | head -1 | cut -d'"' -f4)"
-          echo "Plugins: $(python3 -c "import json; print(len(json.load(open('.claude-plugin/marketplace.json'))['plugins']))")"
+          python3 << 'EOF'
+          import json
+
+          with open('.claude-plugin/marketplace.json') as f:
+              data = json.load(f)
+
+          print(f"Marketplace: {data.get('name')}")
+          print(f"Version: {data.get('version')}")
+          print(f"License: {data.get('license')}")
+          print(f"Plugins: {len(data.get('plugins', []))}")
+          for plugin in data.get('plugins', []):
+              print(f"  - {plugin['name']} v{plugin.get('version', 'N/A')}")
+          EOF
           echo "======================================="
+          echo "✓ All validations passed"

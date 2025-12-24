@@ -1,0 +1,109 @@
+site_name: F5 Distributed Cloud Plugin Marketplace
+site_url: https://robinmordasiewicz.github.io/f5-distributed-cloud-marketplace/
+site_description: A curated collection of Claude Code plugins for automating F5 Distributed Cloud operations
+site_author: Robin Mordasiewicz
+
+repo_name: robinmordasiewicz/f5-distributed-cloud-marketplace
+repo_url: https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace
+edit_uri: blob/gh-pages/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep orange
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep orange
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/robinmordasiewicz
+      name: Robin Mordasiewicz on GitHub
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: robinmordasiewicz
+      repo: f5-distributed-cloud-marketplace
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Plugins:
+      - Overview: plugins/index.md
+  - Contributing: contributing.md
+  - Roadmap: roadmap.md
+  - Troubleshooting: troubleshooting.md
+
+copyright: Copyright &copy; 2024 Robin Mordasiewicz

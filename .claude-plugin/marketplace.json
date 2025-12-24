@@ -3,6 +3,9 @@
   "name": "f5-distributed-cloud",
   "version": "0.1.0",
   "description": "F5 Distributed Cloud automation plugins for network engineers and DevOps teams",
+  "license": "MIT",
+  "homepage": "https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace",
+  "repository": "https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace",
   "owner": {
     "name": "Robin Mordasiewicz",
     "url": "https://github.com/robinmordasiewicz"
