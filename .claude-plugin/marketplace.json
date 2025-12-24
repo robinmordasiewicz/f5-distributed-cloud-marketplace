@@ -1,0 +1,27 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "f5-distributed-cloud",
+  "version": "1.0.0",
+  "description": "F5 Distributed Cloud automation plugins for network engineers and DevOps teams",
+  "owner": {
+    "name": "Robin Mordasiewicz",
+    "url": "https://github.com/robinmordasiewicz"
+  },
+  "plugins": [
+    {
+      "name": "f5xc-chrome",
+      "description": "Chrome browser automation for F5 XC console - navigate, crawl, and automate GUI operations",
+      "version": "1.0.0",
+      "author": {
+        "name": "Robin Mordasiewicz",
+        "url": "https://github.com/robinmordasiewicz"
+      },
+      "source": {
+        "source": "github",
+        "repo": "robinmordasiewicz/f5xc-chrome"
+      },
+      "category": "automation",
+      "tags": ["f5", "xc", "distributed-cloud", "browser", "console", "waap"]
+    }
+  ]
+}
