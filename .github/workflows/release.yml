@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -45,22 +46,23 @@ jobs:
             COMMITS=$(git log --pretty=format:"%s" ${LATEST_TAG}..HEAD)
           fi
 
-          # Check for no new commits
-          if [ -z "$COMMITS" ]; then
+          # Check for no new commits (excluding release commits)
+          COMMITS_FILTERED=$(echo "$COMMITS" | grep -v "^chore: release v" || true)
+          if [ -z "$COMMITS_FILTERED" ]; then
             echo "skip=true" >> $GITHUB_OUTPUT
-            echo "No new commits since last tag"
+            echo "No new commits since last tag (excluding release commits)"
             exit 0
           fi
 
           echo "skip=false" >> $GITHUB_OUTPUT
 
           # Determine bump type from conventional commits
-          if echo "$COMMITS" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?!:|BREAKING CHANGE:"; then
+          if echo "$COMMITS_FILTERED" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?!:|BREAKING CHANGE:"; then
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
             BUMP_TYPE="major"
-          elif echo "$COMMITS" | grep -qE "^feat(\(.+\))?:"; then
+          elif echo "$COMMITS_FILTERED" | grep -qE "^feat(\(.+\))?:"; then
             MINOR=$((MINOR + 1))
             PATCH=0
             BUMP_TYPE="minor"
@@ -94,6 +96,9 @@ jobs:
               COMMITS=$(git log --pretty=format:"%s" ${LATEST_TAG}..HEAD)
             fi
 
+            # Filter out release commits
+            COMMITS=$(echo "$COMMITS" | grep -v "^chore: release v" || true)
+
             # Extract features
             FEATURES=$(echo "$COMMITS" | grep -E "^feat(\(.+\))?:" | sed 's/^feat\(([^)]*)\)\?: /- /' | sed 's/^feat: /- /' || true)
             if [ -n "$FEATURES" ]; then
@@ -113,7 +118,7 @@ jobs:
             fi
 
             # Extract other changes
-            OTHERS=$(echo "$COMMITS" | grep -E "^(docs|style|refactor|perf|test|chore)(\(.+\))?:" | sed 's/^\([a-z]*\)\(([^)]*)\)\?: /- /' | sed 's/^\([a-z]*\): /- /' || true)
+            OTHERS=$(echo "$COMMITS" | grep -E "^(docs|style|refactor|perf|test|chore)(\(.+\))?:" | grep -v "^chore: release v" | sed 's/^\([a-z]*\)\(([^)]*)\)\?: /- /' | sed 's/^\([a-z]*\): /- /' || true)
             if [ -n "$OTHERS" ]; then
               echo "### Changed"
               echo ""
@@ -124,16 +129,24 @@ jobs:
 
           cat changelog_entry.md
 
-      - name: Update CHANGELOG.md
+      - name: Create release branch and update files
         if: steps.bump.outputs.skip != 'true'
+        id: create_branch
         run: |
-          # Insert new entry after the header
-          if [ -f "CHANGELOG.md" ]; then
-            # Find line number after the introductory text (after first ## heading or after header)
-            HEADER_END=$(grep -n "^## \[" CHANGELOG.md | head -1 | cut -d: -f1)
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          BRANCH_NAME="release/v${NEW_VERSION}"
 
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create release branch
+          git checkout -b "$BRANCH_NAME"
+
+          # Update CHANGELOG.md
+          if [ -f "CHANGELOG.md" ]; then
+            HEADER_END=$(grep -n "^## \[" CHANGELOG.md | head -1 | cut -d: -f1)
             if [ -n "$HEADER_END" ]; then
-              # Insert before first version entry
               {
                 head -n $((HEADER_END - 1)) CHANGELOG.md
                 echo ""
@@ -142,38 +155,101 @@ jobs:
               tail -n +$HEADER_END CHANGELOG.md >> CHANGELOG_new.md
               mv CHANGELOG_new.md CHANGELOG.md
             else
-              # No existing entries, append to end
               echo "" >> CHANGELOG.md
               cat changelog_entry.md >> CHANGELOG.md
             fi
           fi
 
-      - name: Update version in marketplace.json
-        if: steps.bump.outputs.skip != 'true'
-        run: |
-          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          # Update version in marketplace.json
           python3 << EOF
           import json
-
           with open('.claude-plugin/marketplace.json', 'r') as f:
               data = json.load(f)
-
           data['version'] = '$NEW_VERSION'
-
           with open('.claude-plugin/marketplace.json', 'w') as f:
               json.dump(data, f, indent=2)
               f.write('\n')
           EOF
 
-      - name: Commit version bump
+          # Remove temporary file
+          rm -f changelog_entry.md
+
+          # Commit changes
+          git add -A
+          git commit -m "chore: release v${NEW_VERSION}"
+
+          # Push branch
+          git push origin "$BRANCH_NAME"
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
         if: steps.bump.outputs.skip != 'true'
+        id: create_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           NEW_VERSION="${{ steps.bump.outputs.new_version }}"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --staged --quiet || git commit -m "chore: release v${NEW_VERSION}"
-          git push
+          BRANCH_NAME="${{ steps.create_branch.outputs.branch_name }}"
+
+          PR_URL=$(gh pr create \
+            --title "chore: release v${NEW_VERSION}" \
+            --body "## Release v${NEW_VERSION}
+
+          This PR was automatically created by the release workflow.
+
+          ### Changes
+          $(cat changelog_entry.md 2>/dev/null || echo "See CHANGELOG.md for details")
+
+          ---
+          🤖 Auto-generated release PR" \
+            --base main \
+            --head "$BRANCH_NAME")
+
+          PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+          echo "Created PR #$PR_NUMBER: $PR_URL"
+
+      - name: Merge Pull Request
+        if: steps.bump.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ steps.create_pr.outputs.pr_number }}"
+
+          # Wait for PR checks (with timeout)
+          echo "Waiting for PR checks..."
+          for i in {1..30}; do
+            sleep 10
+            STATUS=$(gh pr checks "$PR_NUMBER" --json state --jq '.[].state' 2>/dev/null | sort -u || echo "pending")
+            echo "Check status: $STATUS"
+
+            if echo "$STATUS" | grep -q "FAILURE"; then
+              echo "PR checks failed"
+              exit 1
+            fi
+
+            if [ "$STATUS" = "SUCCESS" ] || [ -z "$STATUS" ]; then
+              echo "PR checks passed or no checks configured"
+              break
+            fi
+
+            if [ $i -eq 30 ]; then
+              echo "Timeout waiting for PR checks"
+              exit 1
+            fi
+          done
+
+          # Merge the PR
+          gh pr merge "$PR_NUMBER" --merge --delete-branch
+          echo "Merged PR #$PR_NUMBER"
+
+      - name: Checkout main after merge
+        if: steps.bump.outputs.skip != 'true'
+        run: |
+          git checkout main
+          git pull origin main
 
       - name: Create and push tag
         if: steps.bump.outputs.skip != 'true'
@@ -188,7 +264,10 @@ jobs:
           NEW_VERSION="${{ steps.bump.outputs.new_version }}"
 
           {
-            cat changelog_entry.md
+            echo "## What's Changed"
+            echo ""
+            # Get the changelog entry from the committed file
+            sed -n "/^## \[${NEW_VERSION}\]/,/^## \[/p" CHANGELOG.md | head -n -1
             echo ""
             echo "---"
             echo ""
