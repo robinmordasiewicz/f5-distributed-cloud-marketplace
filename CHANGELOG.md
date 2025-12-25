@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [3.0.0] - 2025-12-25
+
+### Fixed
+
+- remove non-standard registry property and fix markdown line length
+- add registry property to marketplace schema
+
 ## [3.0.0] - 2025-12-25
 
 ### Added
