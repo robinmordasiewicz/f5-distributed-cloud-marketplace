@@ -1,132 +1,658 @@
-/* F5 Brand Colors */
+/* ==========================================================================
+   F5 Distributed Cloud Marketplace - Enhanced Styling
+   Modern, professional design with F5 brand integration
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
 :root {
-  --md-primary-fg-color: #E4002B;
-  --md-primary-fg-color--light: #FF6B4A;
-  --md-primary-fg-color--dark: #B8001F;
-  --md-accent-fg-color: #FF6B4A;
+  /* F5 Brand Colors */
+  --f5-red: #E4002B;
+  --f5-red-light: #FF6B4A;
+  --f5-red-dark: #B8001F;
+  --f5-orange: #FF6B4A;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--f5-red) 0%, var(--f5-orange) 100%);
+  --gradient-hero: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --gradient-hero-overlay: linear-gradient(180deg, rgba(228, 0, 43, 0.1) 0%, rgba(255, 107, 74, 0.05) 100%);
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 20px rgba(228, 0, 43, 0.3);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* MkDocs Material overrides */
+  --md-primary-fg-color: var(--f5-red);
+  --md-primary-fg-color--light: var(--f5-red-light);
+  --md-primary-fg-color--dark: var(--f5-red-dark);
+  --md-accent-fg-color: var(--f5-orange);
 }
 
 [data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #FF6B4A;
-  --md-accent-fg-color: #FF8A65;
+  --md-primary-fg-color: var(--f5-orange);
+  --md-accent-fg-color: var(--f5-red-light);
+  --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
 }
 
-/* Custom styling for feature grid */
+/* --------------------------------------------------------------------------
+   Hero Section
+   -------------------------------------------------------------------------- */
+.hero-section {
+  background: var(--gradient-hero);
+  position: relative;
+  padding: var(--space-3xl) var(--space-xl);
+  margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-2xl);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  overflow: hidden;
+  text-align: center;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-hero-overlay);
+  pointer-events: none;
+}
+
+.hero-section::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(228, 0, 43, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(255, 107, 74, 0.1) 0%, transparent 50%);
+  animation: heroGlow 15s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes heroGlow {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(2%, 2%) rotate(5deg); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: var(--space-md);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
+}
+
+.hero-title .highlight {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-xl);
+  line-height: 1.6;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: center;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition-normal);
+}
+
+.hero-badge:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--gradient-primary);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(228, 0, 43, 0.4);
+  color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   Feature Cards (Grid)
+   -------------------------------------------------------------------------- */
+.md-typeset .grid.cards > ul {
+  gap: var(--space-lg);
+}
+
 .md-typeset .grid.cards > ul > li {
+  background: var(--gradient-card);
   border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 0.5rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.md-typeset .grid.cards > ul > li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
 }
 
 .md-typeset .grid.cards > ul > li:hover {
   border-color: var(--md-accent-fg-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
 }
 
-/* Status indicators */
-.green {
-  color: #4CAF50;
+.md-typeset .grid.cards > ul > li:hover::before {
+  opacity: 1;
 }
 
-.orange {
-  color: #FF9800;
+/* Card icons */
+.md-typeset .grid.cards > ul > li > :first-child {
+  color: var(--md-primary-fg-color);
+  margin-bottom: var(--space-md);
 }
 
-/* Plugin card styling */
+/* --------------------------------------------------------------------------
+   Status Indicators
+   -------------------------------------------------------------------------- */
+.green { color: #4CAF50; }
+.orange { color: #FF9800; }
+.red { color: var(--f5-red); }
+
+/* Animated status dot */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: var(--space-sm);
+}
+
+.status-dot.active {
+  background: #4CAF50;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-dot.pending {
+  background: #FF9800;
+}
+
+.status-dot.inactive {
+  background: #9E9E9E;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   Badge System
+   -------------------------------------------------------------------------- */
+.md-typeset .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-available {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.badge-planned {
+  background: linear-gradient(135deg, #9E9E9E 0%, #757575 100%);
+  color: white;
+}
+
+.badge-beta {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  color: white;
+}
+
+.badge-new {
+  background: var(--gradient-primary);
+  color: white;
+  animation: badgePop 0.5s ease;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Version badge */
+.version-badge {
+  background: var(--gradient-primary);
+  color: white;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* --------------------------------------------------------------------------
+   Plugin Cards
+   -------------------------------------------------------------------------- */
 .plugin-card {
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
   background: var(--md-code-bg-color);
-  margin-bottom: 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  margin-bottom: var(--space-lg);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.plugin-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.plugin-card:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: var(--shadow-md);
+}
+
+.plugin-card:hover::after {
+  opacity: 1;
 }
 
 .plugin-card h3 {
   margin-top: 0;
   color: var(--md-primary-fg-color);
+  font-weight: 700;
 }
 
-/* Badge styling */
-.md-typeset .badge {
-  display: inline-block;
-  padding: 0.25em 0.5em;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 0.25rem;
-  margin-right: 0.5rem;
-}
-
-.badge-available {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.badge-planned {
-  background-color: #9E9E9E;
-  color: white;
-}
-
-.badge-beta {
-  background-color: #FF9800;
-  color: white;
-}
-
-/* Version badge */
-.version-badge {
-  background-color: var(--md-primary-fg-color);
-  color: white;
-  padding: 0.2em 0.6em;
-  border-radius: 1em;
-  font-size: 0.8rem;
-  font-weight: 500;
-}
-
-/* Command examples */
+/* --------------------------------------------------------------------------
+   Command Examples
+   -------------------------------------------------------------------------- */
 .command-example {
-  background: linear-gradient(135deg, var(--md-code-bg-color) 0%, var(--md-default-bg-color) 100%);
+  background: linear-gradient(135deg, var(--md-code-bg-color) 0%, rgba(0,0,0,0.02) 100%);
   border-left: 4px solid var(--md-accent-fg-color);
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 0 0.5rem 0.5rem 0;
+  padding: var(--space-lg);
+  margin: var(--space-lg) 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  position: relative;
 }
 
-/* FAQ accordion styling */
+.command-example::before {
+  content: '>';
+  position: absolute;
+  left: var(--space-md);
+  top: var(--space-lg);
+  color: var(--md-accent-fg-color);
+  font-family: var(--md-code-font);
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------------------------
+   Admonitions Enhancement
+   -------------------------------------------------------------------------- */
+.md-typeset .admonition,
 .md-typeset details {
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 0.5rem;
-  margin: 0.5rem 0;
-}
-
-.md-typeset details summary {
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Table styling */
-.md-typeset table:not([class]) {
-  border-radius: 0.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
+.md-typeset .admonition-title,
+.md-typeset details summary {
+  font-weight: 600;
+}
+
+/* Tip admonition special styling */
+.md-typeset .admonition.tip {
+  border-left: 4px solid #4CAF50;
+}
+
+/* Warning admonition */
+.md-typeset .admonition.warning {
+  border-left: 4px solid #FF9800;
+}
+
+/* Info admonition */
+.md-typeset .admonition.info,
+.md-typeset .admonition.note {
+  border-left: 4px solid #2196F3;
+}
+
+/* --------------------------------------------------------------------------
+   Tables Enhancement
+   -------------------------------------------------------------------------- */
+.md-typeset table:not([class]) {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 .md-typeset table:not([class]) th {
-  background-color: var(--md-primary-fg-color);
+  background: var(--gradient-primary);
   color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  padding: var(--space-md) var(--space-lg);
 }
 
-/* Hero section for index */
-.hero {
+.md-typeset table:not([class]) td {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset table:not([class]) tr:last-child td {
+  border-bottom: none;
+}
+
+.md-typeset table:not([class]) tbody tr {
+  transition: background var(--transition-fast);
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background: rgba(228, 0, 43, 0.03);
+}
+
+/* --------------------------------------------------------------------------
+   Code Blocks Enhancement
+   -------------------------------------------------------------------------- */
+.md-typeset pre {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.md-typeset code {
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.3em;
+}
+
+/* Copy button enhancement */
+.md-typeset .md-clipboard {
+  transition: all var(--transition-fast);
+}
+
+.md-typeset .md-clipboard:hover {
+  color: var(--md-accent-fg-color);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Enhancement
+   -------------------------------------------------------------------------- */
+.md-tabs__link {
+  transition: all var(--transition-fast);
+}
+
+.md-tabs__link:hover {
+  opacity: 1;
+}
+
+.md-tabs__link--active {
+  border-bottom: 2px solid var(--md-accent-fg-color);
+}
+
+/* --------------------------------------------------------------------------
+   Announcement Bar
+   -------------------------------------------------------------------------- */
+.announcement-bar {
+  background: var(--gradient-primary);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
   text-align: center;
-  padding: 2rem;
-  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
-.hero h1 {
+.announcement-bar a {
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.announcement-bar a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Stats/Metrics Section
+   -------------------------------------------------------------------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.stat-number {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
 }
 
-/* Responsive adjustments */
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--md-default-fg-color--light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: var(--space-xs);
+}
+
+/* --------------------------------------------------------------------------
+   Feature List
+   -------------------------------------------------------------------------- */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-lg) 0;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+.feature-list .icon {
+  color: var(--md-primary-fg-color);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Footer Enhancement
+   -------------------------------------------------------------------------- */
+.md-footer {
+  margin-top: var(--space-3xl);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adjustments
+   -------------------------------------------------------------------------- */
 @media screen and (max-width: 76.1875em) {
-  .md-typeset .grid.cards > ul > li {
-    padding: 1rem;
+  .hero-section {
+    padding: var(--space-xl) var(--space-md);
+    margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) var(--space-xl);
   }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .md-typeset .grid.cards > ul > li {
+    padding: var(--space-lg);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 44.9375em) {
+  .hero-badges {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print Styles
+   -------------------------------------------------------------------------- */
+@media print {
+  .hero-section {
+    background: none;
+    color: black;
+    padding: var(--space-lg);
+  }
+
+  .hero-title {
+    color: black;
+    text-shadow: none;
+  }
+
+  .hero-subtitle {
+    color: #333;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Smooth Scrolling & Focus States
+   -------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Loading Animation (for async content)
+   -------------------------------------------------------------------------- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading {
+  background: linear-gradient(90deg,
+    var(--md-default-bg-color) 0%,
+    var(--md-default-fg-color--lightest) 50%,
+    var(--md-default-bg-color) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
