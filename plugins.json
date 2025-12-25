@@ -1,0 +1,38 @@
+{
+  "$schema": "./schemas/plugins.schema.json",
+  "version": "1.0.0",
+  "registry": {
+    "name": "f5-distributed-cloud",
+    "description": "F5 Distributed Cloud plugin registry",
+    "homepage": "https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace"
+  },
+  "plugins": {
+    "f5xc-chrome": {
+      "name": "xc",
+      "description": "Chrome browser automation for F5 Distributed Cloud console",
+      "repository": "https://github.com/robinmordasiewicz/f5xc-chrome",
+      "latest": "0.6.0",
+      "versions": {
+        "0.6.0": {
+          "tarball": "https://github.com/robinmordasiewicz/f5xc-chrome/archive/refs/tags/v0.6.0.tar.gz",
+          "sha256": "",
+          "released": "2025-12-25",
+          "changelog": "https://github.com/robinmordasiewicz/f5xc-chrome/releases/tag/v0.6.0"
+        },
+        "0.3.0": {
+          "tarball": "https://github.com/robinmordasiewicz/f5xc-chrome/archive/refs/tags/v0.3.0.tar.gz",
+          "sha256": "",
+          "released": "2025-12-24",
+          "changelog": "https://github.com/robinmordasiewicz/f5xc-chrome/releases/tag/v0.3.0"
+        }
+      },
+      "author": {
+        "name": "Robin Mordasiewicz",
+        "url": "https://github.com/robinmordasiewicz"
+      },
+      "license": "MIT",
+      "keywords": ["f5", "xc", "distributed-cloud", "chrome", "console", "automation"],
+      "category": "automation"
+    }
+  }
+}

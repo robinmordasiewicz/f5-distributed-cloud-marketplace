@@ -1,0 +1,4 @@
+# Plugins are downloaded from the registry, not stored in git
+# Use ./scripts/plugin-manager.sh sync to install all plugins
+*
+!.gitignore
