@@ -5,13 +5,30 @@ All notable changes to this marketplace will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [3.2.0] - 2025-12-25
 
 ### Added
 
+- **Enhanced documentation styling**: Modern visual design with F5 branding
+  - Hero section with gradient background and animated glow effects
+  - CSS design tokens for consistent theming
+  - Enhanced feature cards with hover animations
+  - Improved table styling with gradient headers
+  - Stats grid component for metrics display
+  - Announcement bar capability in overrides
+- **Typography improvements**: Switched to Inter and JetBrains Mono fonts
+- **Abbreviations glossary**: Auto-expanding technical terms (F5 XC, WAF, etc.)
+- **SVG branding assets**: Custom logo and favicon with F5 gradient colors
+- **Admonition customizations**: Custom icons and styled borders for all types
 - add enhanced metadata and sophisticated structure (#24)
 - update f5xc-console to v0.13.0 (#25)
+
+### Changed
+
+- Redesigned landing page with hero banner and stats section
+- Updated color scheme to use F5 brand red (#E4002B) and orange (#FF6B4A)
+- Enhanced navigation with sticky tabs and instant loading progress
+- Improved code blocks with auto-titles and better copy button
 
 ## [3.1.0] - 2025-12-25
 

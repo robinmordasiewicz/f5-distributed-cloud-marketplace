@@ -1,98 +1,181 @@
-# F5 Distributed Cloud Plugin Marketplace
+---
+hide:
+  - navigation
+  - toc
+---
 
-Welcome to the official plugin marketplace for automating F5 Distributed Cloud (XC) operations with Claude Code.
+<div class="hero-section" markdown>
+<div class="hero-content" markdown>
 
-## What is this Marketplace?
+<h1 class="hero-title">F5 Distributed Cloud<br><span class="highlight">Plugin Marketplace</span></h1>
 
-This marketplace provides a curated collection of Claude Code plugins designed specifically for
-network engineers, DevOps teams, and platform engineers working with F5 Distributed Cloud.
+<p class="hero-subtitle">
+Automate F5 XC operations with Claude Code. Intelligent browser automation,
+natural language commands, and enterprise-grade security for network engineers and DevOps teams.
+</p>
 
-!!! tip "Quick Start"
-    ```bash
-    # Add this marketplace to Claude Code
-    /plugin marketplace add robinmordasiewicz/f5-distributed-cloud-marketplace
+<div class="hero-badges">
+<span class="hero-badge">:material-check-circle: Open Source</span>
+<span class="hero-badge">:material-shield-check: Enterprise Ready</span>
+<span class="hero-badge">:material-lightning-bolt: AI-Powered</span>
+</div>
 
-    # Install a plugin
-    /plugin install f5xc-console
-    ```
+[Get Started :material-arrow-right:](getting-started.md){ .hero-cta }
 
-## Key Features
+</div>
+</div>
+
+<div class="stats-grid" markdown>
+<div class="stat-item">
+<div class="stat-number">1</div>
+<div class="stat-label">Active Plugin</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">23+</div>
+<div class="stat-label">Workflows</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">100%</div>
+<div class="stat-label">Automation</div>
+</div>
+<div class="stat-item">
+<div class="stat-number">MIT</div>
+<div class="stat-label">Licensed</div>
+</div>
+</div>
+
+---
+
+## :material-puzzle-outline: Key Features
 
 <div class="grid cards" markdown>
 
-- :material-lightning-bolt:{ .lg .middle } __Automation First__
+- :material-lightning-bolt:{ .lg .middle } **Automation First**
 
     ---
 
-    Automate repetitive F5 XC console tasks with intelligent browser automation and API integration.
+    Automate repetitive F5 XC console tasks with intelligent browser automation
+    powered by Claude's understanding of your intent.
 
-- :material-puzzle:{ .lg .middle } __Modular Design__
+    [:octicons-arrow-right-24: Learn more](plugins/f5xc-console.md)
 
-    ---
-
-    Install only the plugins you need. Each plugin is independently versioned and maintained.
-
-- :material-security:{ .lg .middle } __Enterprise Ready__
+- :material-brain:{ .lg .middle } **AI-Powered Intelligence**
 
     ---
 
-    Built with security in mind, supporting Azure AD SSO and enterprise authentication flows.
+    Natural language commands translate to precise console actions.
+    Just describe what you want, and Claude handles the details.
 
-- :material-source-repository:{ .lg .middle } __Open Source__
+    [:octicons-arrow-right-24: See examples](getting-started.md#using-plugins)
+
+- :material-security:{ .lg .middle } **Enterprise Security**
 
     ---
 
-    MIT licensed and community-driven. Contributions welcome!
+    Built for enterprise environments with Azure AD SSO,
+    multi-tenant support, and secure authentication flows.
+
+    [:octicons-arrow-right-24: Security details](getting-started.md#authentication)
+
+- :material-source-repository:{ .lg .middle } **Open Source**
+
+    ---
+
+    MIT licensed and community-driven. Contribute workflows,
+    report issues, and help shape the future of F5 automation.
+
+    [:octicons-arrow-right-24: Contribute](contributing.md)
 
 </div>
 
-## Available Plugins
+---
+
+## :material-package-variant: Available Plugins
 
 | Plugin | Description | Status |
 |--------|-------------|--------|
-| [f5xc-console](plugins/f5xc-console.md) | Browser automation for F5 XC console | :material-check-circle:{ .green } Available |
-| f5xc-cli | CLI operations and scripting | :material-clock-outline: Planned |
-| f5xc-terraform | Infrastructure as Code integration | :material-clock-outline: Planned |
-| f5xc-docs | Documentation and API lookup | :material-clock-outline: Planned |
+| [**f5xc-console**](plugins/f5xc-console.md) | Browser automation for F5 XC console operations | <span class="status-dot active"></span> Available |
+| **f5xc-cli** | CLI operations and scripting integration | <span class="status-dot pending"></span> Planned |
+| **f5xc-terraform** | Infrastructure as Code integration | <span class="status-dot pending"></span> Planned |
+| **f5xc-docs** | Documentation and API reference lookup | <span class="status-dot pending"></span> Planned |
 
-## Why Use This Marketplace?
+---
 
-### Streamlined Workflow
+## :material-rocket-launch: Quick Start
 
-Instead of manually navigating the F5 XC console, use natural language commands to:
+!!! tip "Get up and running in 60 seconds"
 
-- Create and configure HTTP load balancers
-- Manage origin pools and health checks
-- Deploy WAF policies
-- Navigate complex multi-tenant environments
+    === "Step 1: Add Marketplace"
+        ```bash
+        /plugin marketplace add robinmordasiewicz/f5-distributed-cloud-marketplace
+        ```
 
-### AI-Powered Assistance
+    === "Step 2: Install Plugin"
+        ```bash
+        /plugin install f5xc-console
+        ```
 
-Claude Code understands your intent and translates it into precise console actions:
+    === "Step 3: Start Automating"
+        ```text
+        You: "Navigate to the shared namespace and show me all HTTP load balancers"
+        Claude: Navigating to shared namespace... Found 3 HTTP load balancers...
+        ```
 
-```text
-You: "Create an HTTP load balancer for my API with WAF protection"
-Claude: Navigates to the correct namespace, creates the LB, configures origins,
-        attaches WAF policy, and validates the configuration.
-```
+---
 
-### Consistent Operations
+## :material-comment-quote: What You Can Do
 
-Reduce human error with repeatable, auditable automation sequences that follow best practices.
+<div class="grid cards" markdown>
 
-## Prerequisites
+- :material-web: **Load Balancers**
 
-Before using plugins from this marketplace:
+    Create, configure, and manage HTTP/HTTPS load balancers with natural language commands.
 
-1. __Claude Code__ - [Install Claude Code](https://claude.com/claude-code)
-2. __Claude in Chrome Extension__ - Required for browser automation plugins
+- :material-server-network: **Origin Pools**
 
-## Getting Help
+    Set up origin pools, configure health checks, and manage backend servers.
 
-- :material-book-open-outline: [Getting Started Guide](getting-started.md)
-- :material-lifebuoy: [Troubleshooting](troubleshooting.md)
-- :material-github: [GitHub Issues](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace/issues)
+- :material-shield-lock: **WAF Policies**
 
-## License
+    Deploy and configure Web Application Firewall policies for application security.
 
-This marketplace and its plugins are released under the [MIT License](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace/blob/main/LICENSE).
+- :material-map-marker-path: **Multi-Tenant Navigation**
+
+    Navigate complex multi-tenant environments with intelligent namespace switching.
+
+</div>
+
+---
+
+## :material-help-circle: Getting Help
+
+<div class="grid cards" markdown>
+
+- :material-book-open-outline: [**Getting Started Guide**](getting-started.md)
+
+    Complete walkthrough from installation to your first automation.
+
+- :material-lifebuoy: [**Troubleshooting**](troubleshooting.md)
+
+    Common issues and solutions for plugin and automation problems.
+
+- :material-github: [**GitHub Issues**](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace/issues)
+
+    Report bugs, request features, or ask questions.
+
+- :material-map: [**Roadmap**](roadmap.md)
+
+    See what's coming next and planned features.
+
+</div>
+
+---
+
+<div style="text-align: center; padding: 2rem 0;" markdown>
+
+**Ready to automate your F5 Distributed Cloud workflows?**
+
+[Get Started :material-arrow-right:](getting-started.md){ .md-button .md-button--primary }
+[View on GitHub :material-github:](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace){ .md-button }
+
+</div>
