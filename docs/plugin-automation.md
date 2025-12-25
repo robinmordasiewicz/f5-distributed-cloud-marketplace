@@ -4,7 +4,8 @@ This document describes how plugins are automatically synchronized from npm regi
 
 ## Overview
 
-When a plugin repository (e.g., `f5xc-console`) publishes a new release to npm, it can trigger a webhook to notify this marketplace. The marketplace then:
+When a plugin repository (e.g., `f5xc-console`) publishes a new release to npm, it can
+trigger a webhook to notify this marketplace. The marketplace then:
 
 1. Fetches the latest version metadata from npm registry
 2. Updates `plugins.json` with the new version

@@ -10,7 +10,6 @@
     "name": "Robin Mordasiewicz",
     "url": "https://github.com/robinmordasiewicz"
   },
-  "registry": "../plugins.json",
   "plugins": [
     {
       "name": "f5xc-console",
