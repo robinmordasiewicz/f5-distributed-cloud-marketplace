@@ -31,7 +31,7 @@
     {
       "name": "f5xc-console",
       "description": "Chrome browser automation for F5 XC console - navigate, crawl, and automate GUI operations",
-      "version": "0.13.0",
+      "version": "0.10.1",
       "author": {
         "name": "Robin Mordasiewicz",
         "url": "https://github.com/robinmordasiewicz"
@@ -41,7 +41,7 @@
         "type": "npm",
         "package": "@robinmordasiewicz/f5xc-console",
         "repository": "https://github.com/robinmordasiewicz/f5xc-console",
-        "tarball": "null"
+        "tarball": "https://registry.npmjs.org/@robinmordasiewicz/f5xc-console/-/f5xc-console-0.10.1.tgz"
       },
       "category": "automation",
       "tags": [
