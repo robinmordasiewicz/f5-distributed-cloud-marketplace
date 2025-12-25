@@ -19,10 +19,7 @@
         "name": "Robin Mordasiewicz",
         "url": "https://github.com/robinmordasiewicz"
       },
-      "source": {
-        "source": "github",
-        "repo": "robinmordasiewicz/f5xc-chrome"
-      },
+      "source": "./plugins/f5xc-chrome",
       "category": "automation",
       "tags": ["f5", "xc", "distributed-cloud", "browser", "console", "waap"]
     }

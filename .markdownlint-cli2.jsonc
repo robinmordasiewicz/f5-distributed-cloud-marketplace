@@ -12,7 +12,9 @@
     "site/**",
     ".venv/**",
     "venv/**",
-    "node_modules/**"
+    "node_modules/**",
+    // Plugin submodules have their own quality standards
+    "plugins/**"
   ],
   // Auto-fix issues where possible
   "fix": true
