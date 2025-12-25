@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [2.0.0] - 2025-12-25
+
+### Changed
+
+- **BREAKING**: Migrated from git submodules to registry-based plugin management
+- Plugins are now downloaded from GitHub Releases instead of tracked as submodules
+- Added `plugins.json` registry manifest for version management
+- Added `scripts/plugin-manager.sh` for installing/updating plugins
+
+### Added
+
+- Plugin registry system with version pinning
+- `plugin-manager.sh sync` command to install all plugins
+- SHA256 checksums for tarball integrity (optional)
+- Support for private and public plugin repositories
+
+### Removed
+
+- Git submodule dependency on f5xc-chrome
+- `.gitmodules` file
+
+### Migration Guide
+
+To migrate from 1.x to 2.0:
+```bash
+# Remove old submodule if present
+git submodule deinit -f plugins/f5xc-chrome
+
+# Install plugins from registry
+./scripts/plugin-manager.sh sync
+```
 
 ## [1.1.2] - 2025-12-25
 

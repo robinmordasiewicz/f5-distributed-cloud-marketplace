@@ -1,3 +1,0 @@
-[submodule "plugins/f5xc-chrome"]
-	path = plugins/f5xc-chrome
-	url = https://github.com/robinmordasiewicz/f5xc-chrome.git
