@@ -223,32 +223,39 @@ jobs:
         run: |
           PR_NUMBER="${{ steps.create_pr.outputs.pr_number }}"
 
-          # Wait for PR checks (with timeout)
-          echo "Waiting for PR checks..."
-          for i in {1..30}; do
-            sleep 10
-            STATUS=$(gh pr checks "$PR_NUMBER" --json state --jq '.[].state' 2>/dev/null | sort -u || echo "pending")
-            echo "Check status: $STATUS"
+          # Enable auto-merge (works with branch protection requiring status checks)
+          echo "Enabling auto-merge for PR #$PR_NUMBER..."
+          gh pr merge "$PR_NUMBER" --auto --merge --delete-branch
 
-            if echo "$STATUS" | grep -q "FAILURE"; then
+          # Wait for PR to actually merge (status checks must pass first)
+          echo "Waiting for PR to merge..."
+          for i in {1..60}; do
+            sleep 10
+            STATE=$(gh pr view "$PR_NUMBER" --json state --jq '.state' 2>/dev/null || echo "UNKNOWN")
+            echo "PR state: $STATE (attempt $i/60)"
+
+            if [ "$STATE" = "MERGED" ]; then
+              echo "PR #$PR_NUMBER successfully merged"
+              break
+            fi
+
+            if [ "$STATE" = "CLOSED" ]; then
+              echo "PR was closed without merging"
+              exit 1
+            fi
+
+            # Check for failed checks
+            CHECKS=$(gh pr checks "$PR_NUMBER" --json state --jq '.[].state' 2>/dev/null | sort -u || echo "")
+            if echo "$CHECKS" | grep -q "FAILURE"; then
               echo "PR checks failed"
               exit 1
             fi
 
-            if [ "$STATUS" = "SUCCESS" ] || [ -z "$STATUS" ]; then
-              echo "PR checks passed or no checks configured"
-              break
-            fi
-
-            if [ $i -eq 30 ]; then
-              echo "Timeout waiting for PR checks"
+            if [ $i -eq 60 ]; then
+              echo "Timeout waiting for PR to merge (10 minutes)"
               exit 1
             fi
           done
-
-          # Merge the PR
-          gh pr merge "$PR_NUMBER" --merge --delete-branch
-          echo "Merged PR #$PR_NUMBER"
 
       - name: Checkout main after merge
         if: steps.bump.outputs.skip != 'true'
