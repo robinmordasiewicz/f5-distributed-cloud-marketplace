@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Abbreviations glossary**: Auto-expanding technical terms (F5 XC, WAF, etc.)
 - **SVG branding assets**: Custom logo and favicon with F5 gradient colors
 - **Admonition customizations**: Custom icons and styled borders for all types
+- add enhanced metadata and sophisticated structure (#24)
+- update f5xc-console to v0.13.0 (#25)
 
 ### Changed
 
