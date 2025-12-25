@@ -114,8 +114,8 @@ Common issues and solutions for the F5 Distributed Cloud plugin marketplace.
 /xc:console crawl https://your-tenant.console.ves.volterra.io
 ```
 
-2. Verify you're logged into the correct tenant
-3. Check that the target exists in your namespace
+1. Verify you're logged into the correct tenant
+2. Check that the target exists in your namespace
 
 ---
 
@@ -147,7 +147,7 @@ Re-authenticate:
 /xc:console status
 ```
 
-2. Login to correct tenant:
+1. Login to correct tenant:
 
 ```bash
 /xc:console login https://correct-tenant.console.ves.volterra.io
@@ -208,11 +208,13 @@ Navigate to correct namespace before creating resources:
 When reporting issues, include:
 
 1. **Claude Code Version:**
+
    ```bash
    claude --version
    ```
 
 2. **Plugin Version:**
+
    ```bash
    /plugin list
    ```

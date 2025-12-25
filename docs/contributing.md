@@ -1,6 +1,7 @@
 # Contributing
 
-We welcome contributions to the F5 Distributed Cloud plugin marketplace! This guide explains how to add plugins, improve existing ones, or enhance the marketplace itself.
+We welcome contributions to the F5 Distributed Cloud plugin marketplace!
+This guide explains how to add plugins, improve existing ones, or enhance the marketplace.
 
 ## Ways to Contribute
 
@@ -91,7 +92,7 @@ Edit `.claude-plugin/marketplace.json`:
 
 ### Recommended Structure
 
-```
+```text
 your-plugin/
 ├── .claude-plugin/
 │   └── plugin.json

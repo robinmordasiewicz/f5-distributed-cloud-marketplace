@@ -1,3 +1,4 @@
+---
 name: Validate Marketplace
 
 on:
@@ -9,8 +10,53 @@ on:
       - main
 
 jobs:
-  validate:
+  lint:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install linting tools
+        run: |
+          pip install ruff mypy yamllint check-jsonschema
+          npm install -g markdownlint-cli2
+
+      - name: Python - Ruff Lint
+        run: ruff check --output-format=github scripts/
+
+      - name: Python - Ruff Format Check
+        run: ruff format --check scripts/
+
+      - name: Python - Type Check (mypy)
+        run: mypy scripts/ --strict
+
+      - name: YAML - Lint
+        run: yamllint --strict -c .yamllint.yml .
+
+      - name: JSON - Schema Validation
+        run: |
+          check-jsonschema \
+            --schemafile schemas/marketplace.schema.json \
+            .claude-plugin/marketplace.json
+
+      - name: Markdown - Lint
+        run: markdownlint-cli2 --config .markdownlint-cli2.jsonc
+
+  validate:
+    name: Validate Marketplace
+    runs-on: ubuntu-latest
+    needs: lint
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -166,3 +212,49 @@ jobs:
           EOF
           echo "======================================="
           echo "✓ All validations passed"
+
+  docs-test:
+    name: Documentation Build Test
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          pip install mkdocs-material mkdocs-minify-plugin
+          npm install -g markdownlint-cli2
+
+      - name: Generate plugin documentation
+        run: python scripts/generate-plugin-docs.py
+
+      - name: Validate generated markdown
+        run: markdownlint-cli2 "docs/plugins/*.md" --config .markdownlint-cli2.jsonc
+
+      - name: Build documentation (strict mode)
+        run: mkdocs build --strict
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "site" ]; then
+            echo "::error::Documentation build failed - site directory not created"
+            exit 1
+          fi
+          if [ ! -f "site/index.html" ]; then
+            echo "::error::Documentation build failed - index.html not generated"
+            exit 1
+          fi
+          echo "✓ Documentation build successful"
+          echo "Generated files:"
+          find site -type f -name "*.html" | head -20

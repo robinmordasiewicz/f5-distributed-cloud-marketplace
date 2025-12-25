@@ -1,0 +1,19 @@
+{
+  // markdownlint-cli2 configuration
+  // Lints ALL markdown files including generated ones in docs/plugins/
+  "config": {
+    "extends": ".markdownlint.json"
+  },
+  "globs": [
+    "**/*.md"
+  ],
+  "ignores": [
+    // Build output directories only - NOT source docs
+    "site/**",
+    ".venv/**",
+    "venv/**",
+    "node_modules/**"
+  ],
+  // Auto-fix issues where possible
+  "fix": true
+}

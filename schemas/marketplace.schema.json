@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://robinmordasiewicz.github.io/f5-distributed-cloud-marketplace/schemas/marketplace.schema.json",
+  "title": "Claude Code Marketplace",
+  "description": "JSON Schema for Claude Code plugin marketplace configuration",
+  "type": "object",
+  "required": ["name", "version", "description", "license", "owner", "plugins"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "Marketplace identifier in kebab-case"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+      "description": "Semantic version (MAJOR.MINOR.PATCH)"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "Brief marketplace description"
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier"
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Documentation URL"
+    },
+    "repository": {
+      "type": "string",
+      "format": "uri",
+      "description": "Source code repository URL"
+    },
+    "owner": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owner/maintainer name"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Owner's website or profile"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "pluginRoot": {
+          "type": "string",
+          "description": "Base directory for relative plugin paths"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "source"],
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+            "description": "Plugin identifier in kebab-case"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Brief plugin description"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+            "description": "Plugin version"
+          },
+          "author": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "url": { "type": "string", "format": "uri" }
+                }
+              }
+            ]
+          },
+          "homepage": {
+            "type": "string",
+            "format": "uri"
+          },
+          "repository": {
+            "type": "string",
+            "format": "uri"
+          },
+          "license": {
+            "type": "string"
+          },
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "category": {
+            "type": "string",
+            "enum": ["automation", "productivity", "development", "testing", "infrastructure", "security", "other"]
+          },
+          "tags": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "source": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Relative path to plugin"
+              },
+              {
+                "type": "object",
+                "required": ["source", "repo"],
+                "additionalProperties": false,
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "enum": ["github", "url"]
+                  },
+                  "repo": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+$",
+                    "description": "GitHub owner/repo format"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            ]
+          },
+          "strict": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    }
+  }
+}

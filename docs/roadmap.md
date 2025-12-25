@@ -1,6 +1,7 @@
 # Roadmap
 
-This roadmap outlines the planned development of F5 Distributed Cloud plugins. Priorities may shift based on community feedback and contributions.
+This roadmap outlines the planned development of F5 Distributed Cloud plugins.
+Priorities may shift based on community feedback and contributions.
 
 ## Current Status
 
@@ -148,4 +149,5 @@ Want to help build these plugins? See our [Contributing Guide](contributing.md) 
 
 ## Version History
 
-See the [Changelog](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace/blob/main/CHANGELOG.md) for detailed release notes.
+See the [Changelog](https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace/blob/main/CHANGELOG.md)
+for detailed release notes.

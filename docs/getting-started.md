@@ -42,7 +42,7 @@ Add this marketplace to your Claude Code installation:
 
 Verify the marketplace is added:
 
-```
+```text
 /plugin marketplace list
 ```
 
@@ -50,7 +50,7 @@ Verify the marketplace is added:
 
 ### Browse Available Plugins
 
-```
+```text
 /plugin
 ```
 
@@ -72,7 +72,7 @@ This shows all plugins from configured marketplaces.
 
 ### Verify Installation
 
-```
+```text
 /plugin list
 ```
 
@@ -84,7 +84,7 @@ The `f5xc-chrome` plugin provides browser automation for the F5 XC console.
 
 #### Login to F5 XC Console
 
-```
+```text
 /xc:console login https://your-tenant.console.ves.volterra.io
 ```
 
@@ -92,13 +92,13 @@ This initiates Azure SSO authentication and logs you into the console.
 
 #### Navigate to a Workspace
 
-```
+```text
 /xc:console nav "Web App & API Protection"
 ```
 
 #### Crawl Navigation Metadata
 
-```
+```text
 /xc:console crawl https://your-tenant.console.ves.volterra.io
 ```
 
@@ -106,7 +106,7 @@ Extracts navigation structure for intelligent command routing.
 
 #### Create Resources
 
-```
+```text
 /xc:console create http-lb
 ```
 

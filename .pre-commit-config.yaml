@@ -1,0 +1,113 @@
+---
+# Pre-commit hooks configuration
+# Run: pre-commit install && pre-commit run --all-files
+#
+# Hook execution order is top-to-bottom. Doc generation runs first
+# so subsequent hooks can validate generated markdown files.
+
+repos:
+  # ==============================================================
+  # STEP 1: Generate documentation before linting
+  # ==============================================================
+  - repo: local
+    hooks:
+      - id: generate-docs
+        name: Generate plugin documentation
+        entry: python scripts/generate-plugin-docs.py
+        language: python
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+        additional_dependencies: []
+
+  # ==============================================================
+  # STEP 2: Python code quality
+  # ==============================================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.14.0
+    hooks:
+      - id: mypy
+        files: ^scripts/
+        args: [--strict]
+
+  # ==============================================================
+  # STEP 3: YAML validation
+  # ==============================================================
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [--strict, -c, .yamllint.yml]
+
+  # ==============================================================
+  # STEP 4: JSON schema validation
+  # ==============================================================
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.30.0
+    hooks:
+      - id: check-jsonschema
+        name: Validate marketplace.json
+        files: ^\.claude-plugin/marketplace\.json$
+        args: [--schemafile, schemas/marketplace.schema.json]
+
+  # ==============================================================
+  # STEP 5: Markdown linting (includes generated docs)
+  # ==============================================================
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.1
+    hooks:
+      - id: markdownlint-cli2
+        args: [--config, .markdownlint-cli2.jsonc, --fix]
+
+  # ==============================================================
+  # STEP 6: MkDocs build validation
+  # ==============================================================
+  - repo: local
+    hooks:
+      - id: mkdocs-build
+        name: Build documentation (strict mode)
+        entry: bash -c 'pip install -q mkdocs-material mkdocs-minify-plugin && mkdocs build --strict'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
+
+  # ==============================================================
+  # STEP 7: General file hygiene
+  # ==============================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^site/
+      - id: end-of-file-fixer
+        exclude: ^site/
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  # ==============================================================
+  # STEP 8: Cleanup generated files (not committed to main)
+  # ==============================================================
+  - repo: local
+    hooks:
+      - id: cleanup-generated
+        name: Cleanup generated docs (not committed to main)
+        entry: bash -c 'rm -rf site/ && git checkout docs/plugins/*.md 2>/dev/null || true'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]

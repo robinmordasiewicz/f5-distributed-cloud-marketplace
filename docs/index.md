@@ -4,7 +4,8 @@ Welcome to the official plugin marketplace for automating F5 Distributed Cloud (
 
 ## What is this Marketplace?
 
-This marketplace provides a curated collection of Claude Code plugins designed specifically for network engineers, DevOps teams, and platform engineers working with F5 Distributed Cloud services.
+This marketplace provides a curated collection of Claude Code plugins designed specifically for
+network engineers, DevOps teams, and platform engineers working with F5 Distributed Cloud.
 
 !!! tip "Quick Start"
     ```bash
@@ -19,25 +20,25 @@ This marketplace provides a curated collection of Claude Code plugins designed s
 
 <div class="grid cards" markdown>
 
--   :material-lightning-bolt:{ .lg .middle } __Automation First__
+- :material-lightning-bolt:{ .lg .middle } __Automation First__
 
     ---
 
     Automate repetitive F5 XC console tasks with intelligent browser automation and API integration.
 
--   :material-puzzle:{ .lg .middle } __Modular Design__
+- :material-puzzle:{ .lg .middle } __Modular Design__
 
     ---
 
     Install only the plugins you need. Each plugin is independently versioned and maintained.
 
--   :material-security:{ .lg .middle } __Enterprise Ready__
+- :material-security:{ .lg .middle } __Enterprise Ready__
 
     ---
 
     Built with security in mind, supporting Azure AD SSO and enterprise authentication flows.
 
--   :material-source-repository:{ .lg .middle } __Open Source__
+- :material-source-repository:{ .lg .middle } __Open Source__
 
     ---
 
@@ -69,7 +70,7 @@ Instead of manually navigating the F5 XC console, use natural language commands 
 
 Claude Code understands your intent and translates it into precise console actions:
 
-```
+```text
 You: "Create an HTTP load balancer for my API with WAF protection"
 Claude: Navigates to the correct namespace, creates the LB, configures origins,
         attaches WAF policy, and validates the configuration.
@@ -83,8 +84,8 @@ Reduce human error with repeatable, auditable automation sequences that follow b
 
 Before using plugins from this marketplace:
 
-1. **Claude Code** - [Install Claude Code](https://claude.com/claude-code)
-2. **Claude in Chrome Extension** - Required for browser automation plugins
+1. __Claude Code__ - [Install Claude Code](https://claude.com/claude-code)
+2. __Claude in Chrome Extension__ - Required for browser automation plugins
 
 ## Getting Help
 

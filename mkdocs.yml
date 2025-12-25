@@ -102,6 +102,7 @@ nav:
   - Getting Started: getting-started.md
   - Plugins:
       - Overview: plugins/index.md
+      - f5xc-chrome: plugins/f5xc-chrome.md
   - Contributing: contributing.md
   - Roadmap: roadmap.md
   - Troubleshooting: troubleshooting.md
