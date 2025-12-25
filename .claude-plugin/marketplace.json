@@ -10,6 +10,12 @@
     "name": "Robin Mordasiewicz",
     "url": "https://github.com/robinmordasiewicz"
   },
+  "metadata": {
+    "description": "Curated F5 Distributed Cloud automation plugins with browser-based console automation, intelligent agents, and pre-built workflows",
+    "pluginRoot": "./plugins",
+    "categories": ["automation", "infrastructure", "security"],
+    "keywords": ["f5", "distributed-cloud", "waap", "load-balancer", "waf", "browser-automation"]
+  },
   "plugins": [
     {
       "name": "f5xc-console",

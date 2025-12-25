@@ -5,13 +5,23 @@ All notable changes to this marketplace will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
-
 ## [3.1.0] - 2025-12-25
 
 ### Added
 
-- enable auto-merge for plugin update PRs (#22)
+- **Agents directory**: Added intelligent orchestration agents
+  - `xc-architect.md` - F5 XC architecture advisor for design decisions
+  - `xc-troubleshooter.md` - Diagnostic agent for debugging issues
+- **MCP configuration**: Added `.mcp.json` with explicit claude-in-chrome dependency
+- **Enhanced marketplace metadata**: Added `metadata` block with pluginRoot, categories, keywords
+- **Hooks infrastructure**: Added `hooks/hooks.json` for lifecycle automation
+- **Testing infrastructure**: Added `tests/` directory with workflow tests and fixtures
+- **Auto-merge for plugin-sync**: PRs now auto-merge after CI passes (#22)
+
+### Changed
+
+- Bumped marketplace version to 3.1.0
+- Enhanced plugin discoverability with metadata block
 
 ## [3.0.1] - 2025-12-25
 
