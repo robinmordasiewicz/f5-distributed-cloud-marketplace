@@ -16,7 +16,7 @@
         "registry": "https://registry.npmjs.org"
       },
       "repository": "https://github.com/robinmordasiewicz/f5xc-console",
-      "latest": "0.10.1",
+      "latest": "0.13.0",
       "versions": {
         "0.10.1": {
           "tarball": "https://registry.npmjs.org/@robinmordasiewicz/f5xc-console/-/f5xc-console-0.10.1.tgz",
@@ -35,6 +35,12 @@
           "integrity": "sha512-q+SBhlYhjYmdNPs2ij6cVcD1j1SOInPSUaPC5hk6MbuW4dKqmfKe5xzsceNSHMu592Ujzc/aeN9Ro4ln2X+DKw==",
           "released": "2025-12-25",
           "changelog": "https://github.com/robinmordasiewicz/f5xc-console/releases/tag/v0.6.0"
+        },
+        "0.13.0": {
+          "tarball": "null",
+          "integrity": "null",
+          "released": "null",
+          "changelog": "https://github.com/robinmordasiewicz/f5xc-console/releases/tag/v0.13.0"
         }
       },
       "author": {
@@ -42,7 +48,16 @@
         "url": "https://github.com/robinmordasiewicz"
       },
       "license": "MIT",
-      "keywords": ["claude-code", "claude-plugin", "f5", "xc", "distributed-cloud", "chrome", "console", "automation"],
+      "keywords": [
+        "claude-code",
+        "claude-plugin",
+        "f5",
+        "xc",
+        "distributed-cloud",
+        "chrome",
+        "console",
+        "automation"
+      ],
       "category": "automation"
     }
   }
