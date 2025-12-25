@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "f5-distributed-cloud",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "F5 Distributed Cloud automation plugins for network engineers and DevOps teams",
   "license": "MIT",
   "homepage": "https://github.com/robinmordasiewicz/f5-distributed-cloud-marketplace",
